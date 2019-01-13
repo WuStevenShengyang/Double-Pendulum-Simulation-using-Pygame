@@ -142,15 +142,15 @@ def main():
                 view = False
 
         pendulum1.run()
-        pendulum1.fade()
+        pendulum1.trace()
         pendulum1.draw()
 
         pendulum2.run()
-        pendulum2.fade()
+        pendulum2.trace()
         pendulum2.draw()
 
         pendulum3.run()
-        pendulum3.fade()
+        pendulum3.trace()
         pendulum3.draw()
 
 
