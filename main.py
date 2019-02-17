@@ -26,19 +26,20 @@ class doublePendulum():
 
         self.endPoints = []
           
-        self.l1 = 130
-        self.l2 = 130
+        self.l1 = 140
+        self.l2 = 40
+        
    
         self.m1 = 0.1
-        self.m2 = 0.1
+        self.m2 = 0.000001
    
         self.v1 = 0
         self.v2 = 0
    
         self.a1 = 0
         self.a2 = 0
-   
-        self.g = 1
+
+        self.g = 1 
 
         self.color = color
 
@@ -76,10 +77,10 @@ class doublePendulum():
         
     #Draw everything 
     def draw(self):
-        pygame.draw.circle(self.screen, self.color, (int(self.x1), int(self.y1)), 17)
+        pygame.draw.circle(self.screen, self.color, (int(self.x1), int(self.y1)), 12)
         pygame.draw.line(self.screen, BLACK, (int(self.width / 2), int(self.height / 4)), (int(self.x1), int(self.y1)), 1)
 
-        pygame.draw.circle(self.screen, self.color, (int(self.x2), int(self.y2)), 17)
+        pygame.draw.circle(self.screen, self.color, (int(self.x2), int(self.y2)), 12)
         pygame.draw.line(self.screen, BLACK, (int(self.x1), int(self.y1)), (int(self.x2), int(self.y2)), 1)
 
     #Operating pendulum (set positions and angles)
@@ -103,8 +104,17 @@ class doublePendulum():
         for i in range(len(self.endPoints) - 1):
             pygame.draw.line(self.screen, (self.R, self.G, self.B), (int(self.endPoints[i][0]), int(self.endPoints[i][1])),
                 (int(self.endPoints[i + 1][0]), int(self.endPoints[i + 1][1])), 2)
+            
+    #Shade the arc (opt 2)
+    def shade(self):
+        if len(self.endPoints) > 30:
+            self.endPoints.remove(self.endPoints[0])
+            
+        for i in range(len(self.endPoints) - 1):
+            pygame.draw.line(self.screen, (self.R, self.G, self.B), (int(self.endPoints[i][0]), int(self.endPoints[i][1])),
+                (int(self.x2), int(self.y2)), 1)
 
-    #End points fade away (opt 2)
+    #End points fade away (opt 3)
     def fade(self):
         if len(self.endPoints) > 10:
             self.endPoints.remove(self.endPoints[0])
@@ -129,10 +139,11 @@ def main():
     w = pygame.display.set_mode((600, 400))
     w.fill(WHITE)
     view = True
+    font = pygame.font.SysFont(None, 20)
 
     clock = pygame.time.Clock()
     
-    pendulum1 = doublePendulum(PI / 2, PI / 2, BLACK)
+    pendulum1 = doublePendulum(PI / 2, PI / 8, BLACK)
     pendulum2 = doublePendulum(PI / 2, PI / 3, BLUE)
     pendulum3 = doublePendulum(PI / 2, PI / 4, RED)
     
@@ -145,13 +156,11 @@ def main():
         pendulum1.trace()
         pendulum1.draw()
 
-        pendulum2.run()
-        pendulum2.trace()
-        pendulum2.draw()
+        acc1 = font.render("First Rod: " + str(format(pendulum1.a1, '.3f')) + " rad/s^2", 0, BLACK)
+        acc2 = font.render("Second Rod: " + str(format(pendulum1.a2, '.3f')) + " rad/s^2", 0, BLACK)
 
-        pendulum3.run()
-        pendulum3.trace()
-        pendulum3.draw()
+        w.blit(acc1, (10, 10))
+        w.blit(acc2, (10, 50))
 
 
         clock.tick(50)
